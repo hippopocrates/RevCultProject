@@ -34,7 +34,7 @@ class Login extends React.Component {
     console.log(newUser);
 
     axios
-      .post("http://localhost:4000/signup", newUser)
+      .post("http://localhost:4000/revcult/signup", newUser)
       .then(res => {
         console.log("axios res.data add user", res.data);
       })

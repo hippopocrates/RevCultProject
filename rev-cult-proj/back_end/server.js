@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb://localhost:27017/revcult",
+  "mongodb://127.0.0.1:27017/revcult",
   { useNewUrlParser: true }
 );
 
@@ -28,7 +28,10 @@ userRoutes.route("/").get(function(req, res) {});
 userRoutes.route("/signup").post(async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
-  let user = new User({ name: req.body.name, password: hashedPassword });
+  let user = new User({
+    username: req.body.username,
+    password: hashedPassword
+  });
   user
     .save()
     .then(user => {
@@ -38,6 +41,8 @@ userRoutes.route("/signup").post(async (req, res) => {
       res.status(400).send("adding new user failed");
     });
 });
+
+app.use("/revcult", userRoutes);
 
 const PORT = 4000;
 

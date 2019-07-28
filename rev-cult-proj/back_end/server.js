@@ -5,6 +5,7 @@ const userRoutes = express.Router();
 const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
 const User = require("./models/userModel");
 
@@ -22,9 +23,10 @@ connection.once("open", function() {
   console.log("MongoDB database connection establishes successfully");
 });
 
-userRoutes.route("/").get(function(req, res) {});
+userRoutes.route("/home").get(function(req, res) {
+  res.json({ message: "Welcome to home page" });
+});
 
-//bcrypt is an async library
 userRoutes.route("/signup").post(async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -36,10 +38,25 @@ userRoutes.route("/signup").post(async (req, res) => {
     .save()
     .then(user => {
       res.status(200).json({ user: "user added successfully" });
+      console.log(user);
     })
     .catch(err => {
       res.status(400).send("adding new user failed");
     });
+});
+
+userRoutes.route("/login").post(async (req, res) => {
+  User.findOne({ username: req.body.username }, (err, user) => {
+    if (user) {
+      bcrypt.compare(req.body.password, user.password, (err, same) => {
+        jwt.sign({ user }, "secretKey", (err, token) => {
+          res.json({
+            token
+          });
+        });
+      });
+    }
+  });
 });
 
 app.use("/revcult", userRoutes);
@@ -49,10 +66,3 @@ const PORT = 4000;
 app.listen(PORT, function() {
   console.log("Server is running on port: " + PORT);
 });
-
-// connect()
-//   .then(async connection => {
-//     const user = await User.create({ username: "hippo" });
-//     console.log(user);
-//   })
-//   .catch(e => console.error(e));

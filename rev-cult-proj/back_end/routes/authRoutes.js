@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/userModel");
 
-userRoutes.route("/signup").post(async (req, res) => {
+userRoutes.post("/signup", async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
   let user = new User({
@@ -24,7 +24,7 @@ userRoutes.route("/signup").post(async (req, res) => {
     });
 });
 
-userRoutes.route("/login").post(async (req, res) => {
+userRoutes.post("/login", async (req, res) => {
   User.findOne({ username: req.body.username }, (err, user) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password, (err, same) => {

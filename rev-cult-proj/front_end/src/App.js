@@ -6,6 +6,7 @@ import "./App.css";
 
 import LoginPage from "./components/LoginPage";
 import Home from "./components/Home";
+import PasswordReset from "./components/PasswordReset";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={LoginPage} />
           <Route exact path="/home" component={Home} />
+          <Route exact path="/passwordreset" component={PasswordReset} />
         </Switch>
       </Container>
     </div>

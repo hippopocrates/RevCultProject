@@ -56,7 +56,7 @@ class SignupForm extends React.Component {
     if (this.state.success) {
       success = (
         <p style={{ color: "green", marginTop: "7px" }}>
-          user successfully added!
+          User successfully added!
         </p>
       );
     }

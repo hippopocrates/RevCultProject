@@ -2,30 +2,29 @@ import React from "react";
 import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
 import { Redirect } from "react-router";
-import { Route, Link } from "react-router-dom";
 
-class LoginForm extends React.Component {
+class PasswordReset extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
       password: "",
-      redirect: false,
-      invalidLogin: false
+      success: false,
+      passwordResetRedirect: false
     };
   }
 
   onChangeUsername = e => {
     this.setState({
       username: e.target.value,
-      invalidLogin: false
+      success: false
     });
   };
 
   onChangePassword = e => {
     this.setState({
       password: e.target.value,
-      invalidLogin: false
+      success: false
     });
   };
 
@@ -38,50 +37,39 @@ class LoginForm extends React.Component {
     };
 
     axios({
-      method: "post",
-      url: "http://localhost:4000/revcult/login",
-      data: newUser,
-      headers: {
-        currentUser: newUser.username
-      }
+      method: "put",
+      url: "http://localhost:4000/revcult/passwordreset",
+      data: newUser
     })
-      .then(res => {
-        if (res.data.token) {
-          window.localStorage.setItem("token", res.data.token);
-          this.setState({ redirect: true });
-        }
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
 
     this.setState({
-      invalidLogin: true
+      username: "",
+      password: "",
+      success: true
     });
   };
 
   render() {
-    let invalidLogin;
-    if (this.state.invalidLogin) {
-      invalidLogin = (
-        <p style={{ color: "red", marginTop: "7px" }}>
-          Invalid username or password!
-          <Link to="/passwordreset" style={{}}>
-            {" "}
-            Reset Password?
-          </Link>
-        </p>
+    let success;
+    if (this.state.success) {
+      success = (
+        <p style={{ color: "green", marginTop: "7px" }}>password updated!</p>
       );
     }
 
-    let homeRedirect;
-    if (this.state.redirect) {
-      homeRedirect = <Redirect to="/home" />;
+    let redirect;
+    if (this.state.passwordResetRedirect) {
+      redirect = <Redirect to="/" />;
     }
+
     return (
       <Grid.Column>
         <Header as="h3" attached="top">
-          Login
+          Password Reset
         </Header>
         <Segment attached>
           <Form onSubmit={this.onSubmit}>
@@ -101,14 +89,21 @@ class LoginForm extends React.Component {
                 placeholder="Password"
               />
             </Form.Field>
-            <Button type="submit">Submit</Button>
-            {homeRedirect}
+            <Button
+              type="submit"
+              onClick={() => {
+                this.setState({ passwordResetRedirect: true });
+              }}
+            >
+              Submit
+            </Button>
           </Form>
-          {invalidLogin}
+          {success}
+          {redirect}
         </Segment>
       </Grid.Column>
     );
   }
 }
 
-export default LoginForm;
+export default PasswordReset;

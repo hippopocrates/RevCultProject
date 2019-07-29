@@ -48,4 +48,20 @@ userRoutes.post("/login", async (req, res) => {
   });
 });
 
+userRoutes.put("/passwordreset", async (req, res) => {
+  console.log("enter passwordreset");
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  User.findOneAndUpdate(
+    { username: req.body.username },
+    { password: hashedPassword }
+  )
+    .then(function() {
+      console.log("password updated successfully");
+    })
+    .catch(err => {
+      res.status(400).send("password update failed");
+    });
+});
+
 module.exports = userRoutes;

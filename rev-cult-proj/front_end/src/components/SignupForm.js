@@ -1,15 +1,13 @@
 import React from "react";
 import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
-import { Redirect } from "react-router";
 
-class LoginForm extends React.Component {
+class SignupForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
-      password: "",
-      redirect: false
+      password: ""
     };
   }
 
@@ -35,19 +33,10 @@ class LoginForm extends React.Component {
 
     axios({
       method: "post",
-      url: "http://localhost:4000/revcult/login",
-      data: newUser,
-      headers: {
-        currentUser: newUser.username
-      }
+      url: "http://localhost:4000/revcult/signup",
+      data: newUser
     })
-      .then(res => {
-        if (res.data.token) {
-          window.localStorage.setItem("token", res.data.token);
-
-          this.setState({ redirect: true });
-        }
-      })
+      .then(res => {})
       .catch(err => {
         console.log(err);
       });
@@ -59,14 +48,10 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    let homeRedirect;
-    if (this.state.redirect) {
-      homeRedirect = <Redirect to="/home" />;
-    }
     return (
       <Grid.Column>
         <Header as="h3" attached="top">
-          Login
+          Sign Up
         </Header>
         <Segment attached>
           <Form onSubmit={this.onSubmit}>
@@ -87,7 +72,6 @@ class LoginForm extends React.Component {
               />
             </Form.Field>
             <Button type="submit">Submit</Button>
-            {homeRedirect}
           </Form>
         </Segment>
       </Grid.Column>
@@ -95,4 +79,4 @@ class LoginForm extends React.Component {
   }
 }
 
-export default LoginForm;
+export default SignupForm;

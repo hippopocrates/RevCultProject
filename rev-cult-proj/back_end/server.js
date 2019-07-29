@@ -27,7 +27,7 @@ connection.once("open", function() {
 });
 
 app.use("/revcult", authRoutes);
-app.use("/revcult/restricted", restrictedRoutes);
+app.use("/revcult", restrictedRoutes);
 
 const PORT = 4000;
 

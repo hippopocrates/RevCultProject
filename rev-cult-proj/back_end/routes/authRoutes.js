@@ -28,12 +28,18 @@ userRoutes.post("/login", async (req, res) => {
   User.findOne({ username: req.body.username }, (err, user) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password, (err, same) => {
-        jwt.sign({ user }, "secretKey", (err, token) => {
-          res.json({
-            token
+        if (same) {
+          jwt.sign({ user }, "secretKey", (err, token) => {
+            res.json({
+              token
+            });
           });
-        });
+        } else {
+          // "invalid password", reset?
+        }
       });
+    } else {
+      // add "this username does not exist" alert
     }
   });
 });

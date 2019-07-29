@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Header } from "semantic-ui-react";
+import { Switch, Route } from "react-router-dom";
 
 import "./App.css";
 import LoginPage from "./components/LoginPage";
@@ -12,7 +13,10 @@ function App() {
         <Header as="h1" block style={{ textAlign: "center" }}>
           RevCult Project
         </Header>
-        <LoginPage />
+        <Switch>
+          <Route exact path="/" component={LoginPage} />
+          <Route exact path="/restricted/home" component={Home} />
+        </Switch>
       </Container>
     </div>
   );

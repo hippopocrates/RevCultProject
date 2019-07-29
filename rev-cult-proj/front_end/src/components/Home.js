@@ -1,30 +1,33 @@
 import React from "react";
 import axios from "axios";
+import { Button } from "semantic-ui-react";
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loggedIn: false
-    };
   }
-
-  // axios
-  //   .get("http://localhost:4000/revcult/home")
-  //   .then(function(res){
-  //     this.setState({loggedIn: true})
-  //     console.log(res);
-  //   })
-  //   .catch(function(err){
-  //     console.log(err);
-  //   });
+  componentDidMount() {
+    axios({
+      method: "get",
+      url: "http://localhost:4000/revcult/restricted/home",
+      headers: {
+        authorization: localStorage.getItem("token")
+      }
+    })
+      .then(function(res) {
+        console.log(res.data.message);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  }
 
   render() {
     return (
       <div>
         <header>
           <h1>Welcome to My Project!</h1>
-          <p>{this.state.loggedIn}</p>
+          <Button onClick={localStorage.setItem("token", "")}>logout</Button>
         </header>
       </div>
     );

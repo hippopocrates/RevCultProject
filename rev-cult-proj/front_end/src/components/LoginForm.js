@@ -7,7 +7,8 @@ class LoginForm extends React.Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      token: ""
     };
   }
 
@@ -34,7 +35,11 @@ class LoginForm extends React.Component {
     axios
       .post("http://localhost:4000/revcult/" + this.props.redirect, newUser)
       .then(res => {
-        console.log("axios res.data add user", res.data);
+        if (res.data.token) {
+          console.log(res.data.token);
+          window.localStorage.setItem("token", res.data.token);
+          this.props.history.push("/restricted/home");
+        }
       })
       .catch(err => {
         console.log(err.response);

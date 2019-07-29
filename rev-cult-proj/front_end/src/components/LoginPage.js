@@ -9,7 +9,7 @@ class LoginPage extends React.Component {
         <Grid columns={2} divided>
           <Grid.Row>
             <LoginForm header="Sign Up" redirect="signup" />
-            <LoginForm header="Login" redirect="login" />
+            <LoginForm header="Login" redirect="login" {...this.props} />
           </Grid.Row>
         </Grid>
       </div>

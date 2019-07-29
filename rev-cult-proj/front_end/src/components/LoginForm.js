@@ -9,19 +9,22 @@ class LoginForm extends React.Component {
     this.state = {
       username: "",
       password: "",
-      redirect: false
+      redirect: false,
+      invalidLogin: false
     };
   }
 
   onChangeUsername = e => {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
+      invalidLogin: false
     });
   };
 
   onChangePassword = e => {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
+      invalidLogin: false
     });
   };
 
@@ -44,7 +47,6 @@ class LoginForm extends React.Component {
       .then(res => {
         if (res.data.token) {
           window.localStorage.setItem("token", res.data.token);
-
           this.setState({ redirect: true });
         }
       })
@@ -52,13 +54,26 @@ class LoginForm extends React.Component {
         console.log(err);
       });
 
-    this.setState({
-      username: "",
-      password: ""
-    });
+    if (!this.state.redirect) {
+      this.setState({
+        username: "",
+        password: "",
+        invalidLogin: true
+      });
+    }
   };
 
   render() {
+    let invalidLogin;
+    if (this.state.invalidLogin) {
+      invalidLogin = (
+        <p style={{ color: "red", marginTop: "7px" }}>
+          invalid username or password!
+        </p>
+      );
+    }
+    console.log("this.state.loginSuccess", this.state.loginSuccess);
+
     let homeRedirect;
     if (this.state.redirect) {
       homeRedirect = <Redirect to="/home" />;
@@ -89,6 +104,7 @@ class LoginForm extends React.Component {
             <Button type="submit">Submit</Button>
             {homeRedirect}
           </Form>
+          {invalidLogin}
         </Segment>
       </Grid.Column>
     );

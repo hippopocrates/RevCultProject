@@ -7,19 +7,22 @@ class SignupForm extends React.Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      success: false
     };
   }
 
   onChangeUsername = e => {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
+      success: false
     });
   };
 
   onChangePassword = e => {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
+      success: false
     });
   };
 
@@ -43,11 +46,20 @@ class SignupForm extends React.Component {
 
     this.setState({
       username: "",
-      password: ""
+      password: "",
+      success: true
     });
   };
 
   render() {
+    let success;
+    if (this.state.success) {
+      success = (
+        <p style={{ color: "green", marginTop: "7px" }}>
+          user successfully added!
+        </p>
+      );
+    }
     return (
       <Grid.Column>
         <Header as="h3" attached="top">
@@ -73,6 +85,7 @@ class SignupForm extends React.Component {
             </Form.Field>
             <Button type="submit">Submit</Button>
           </Form>
+          {success}
         </Segment>
       </Grid.Column>
     );

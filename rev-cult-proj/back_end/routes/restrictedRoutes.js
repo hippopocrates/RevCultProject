@@ -8,12 +8,14 @@ const User = require("../models/userModel");
 const secret = "secret";
 
 userRoutes.get("/home", verifyToken, function(req, res) {
+  console.log("entered home");
   res.json({ message: "Welcome to home page" });
 });
 
 function verifyToken(req, res, next) {
-  const token = window.localStorage.getItem("token");
-  console.log(token);
+  console.log("enter verifyToken");
+  const token = req.headers["authorization"];
+  console.log("token", token);
   if (token) {
     jwt.verify(token, secret, (err, decodedToken) => {});
     next();

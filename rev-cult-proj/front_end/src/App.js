@@ -3,6 +3,8 @@ import { Container, Header } from "semantic-ui-react";
 import { Switch, Route } from "react-router-dom";
 
 import "./App.css";
+
+import Provider from "./components/Provider";
 import LoginPage from "./components/LoginPage";
 import Home from "./components/Home";
 
@@ -15,7 +17,7 @@ function App() {
         </Header>
         <Switch>
           <Route exact path="/" component={LoginPage} />
-          <Route exact path="/restricted/home" component={Home} />
+          <Route exact path="/home" component={Home} />
         </Switch>
       </Container>
     </div>

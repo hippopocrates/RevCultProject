@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, Form, Grid, Header, Segment } from "semantic-ui-react";
 import axios from "axios";
+import { Redirect } from "react-router";
+import Context from "./Context";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -8,7 +10,7 @@ class LoginForm extends React.Component {
     this.state = {
       username: "",
       password: "",
-      token: ""
+      redirect: false
     };
   }
 
@@ -36,13 +38,12 @@ class LoginForm extends React.Component {
       .post("http://localhost:4000/revcult/" + this.props.redirect, newUser)
       .then(res => {
         if (res.data.token) {
-          console.log(res.data.token);
           window.localStorage.setItem("token", res.data.token);
-          this.props.history.push("/restricted/home");
+          this.setState({ redirect: true });
         }
       })
       .catch(err => {
-        console.log(err.response);
+        console.log(err);
       });
 
     this.setState({
@@ -52,6 +53,10 @@ class LoginForm extends React.Component {
   };
 
   render() {
+    let homeRedirect;
+    if (this.state.redirect) {
+      homeRedirect = <Redirect to="/home" />;
+    }
     return (
       <Grid.Column>
         <Header as="h3" attached="top">
@@ -76,6 +81,7 @@ class LoginForm extends React.Component {
               />
             </Form.Field>
             <Button type="submit">Submit</Button>
+            {homeRedirect}
           </Form>
         </Segment>
       </Grid.Column>

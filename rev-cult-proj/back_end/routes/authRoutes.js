@@ -29,7 +29,8 @@ userRoutes.post("/login", async (req, res) => {
     if (user) {
       bcrypt.compare(req.body.password, user.password, (err, same) => {
         if (same) {
-          jwt.sign({ user }, "secretKey", (err, token) => {
+          jwt.sign({ user: "user" }, "secretKey", (err, token) => {
+            console.log(token);
             res.json({
               token
             });
